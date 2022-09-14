@@ -7,7 +7,7 @@ const helper = require('../utils/middleware')
 
 blogsRouter.get('/', async (request, response) => {
   const blogs = await Blog
-  .find({}).populate('user', { username: 1, name: 1 })
+    .find({}).populate('user', { username: 1, name: 1 })
 
   response.status(200).json(blogs)
 })
@@ -25,14 +25,7 @@ blogsRouter.get('/:id', async (request, response) => {
 })
 
 
-const extractUser = async (token, SECRET) => {
-  const decodedToken = jwt.verify(token, SECRET)
-  if (!decodedToken.id) {
-    return response.status(401).json({ error: 'token missing or invalid' })
-  }
-  const user =  await User.findById(decodedToken.id)
-  return user
-}
+
 
 
 
@@ -40,8 +33,14 @@ blogsRouter.post('/', async (request, response) => {
   const body =  request.body
 
   const token = helper.getTokenFrom(request)
-  const user = await extractUser(token, process.env.SECRET) 
-  
+
+  const decodedToken = jwt.verify(token, process.env.SECRET)
+  if (!decodedToken.id) {
+    return response.status(401).json({ error: 'token missing or invalid' })
+  }
+  const user =  await User.findById(decodedToken.id)
+
+
   if(!body.url && !body.title){
     return response.status(400).json({ error: 'Missing title and url' })
   }
@@ -66,14 +65,24 @@ blogsRouter.post('/', async (request, response) => {
 blogsRouter.delete('/:id', async(request, response) => {
 
   const token = helper.getTokenFrom(request)
-  const user = await extractUser(token, process.env.SECRET) 
+
+  const decodedToken = jwt.verify(token, process.env.SECRET)
+  if (!decodedToken.id) {
+    return response.status(401).json({ error: 'token missing or invalid' })
+  }
+  const user =  await User.findById(decodedToken.id)
 
   const blog = await Blog.findById(request.params.id)
- 
+
+  if(!blog.user){
+    await Blog.findByIdAndRemove(request.params.id)
+    response.status(204).end()
+  }
+
   if(blog.user.toString() !== user._id.toString()){
     return response.status(401).json({ error: 'You can not delete other user blog' })
   }
-  
+
 
 
   await Blog.findByIdAndRemove(request.params.id)
@@ -88,14 +97,28 @@ blogsRouter.put('/:id', async(request, response) => {
     return response.status(404).json({ error: 'Blog not found' })
   }
 
+  const token = helper.getTokenFrom(request)
+
+  const decodedToken = jwt.verify(token, process.env.SECRET)
+  if (!decodedToken.id) {
+    return response.status(401).json({ error: 'token missing or invalid' })
+  }
+  const user =  await User.findById(decodedToken.id)
+  if(blog.user.toString() !== user._id.toString()){
+    return response.status(401).json({ error: 'You can not update other users blog' })
+  }
+
+
   const newBlog= {
     title: body.title || blog.title || '',
-    author: blog.title,
+    author: body.author || blog.author,
     url: body.url || blog.url || '',
-    likes: body.likes || blog.likes
+    likes: body.likes || blog.likes,
+    user: user._id
   }
-  await Blog.findByIdAndUpdate(request.params.id, newBlog, { new: true })
-  response.status(200).json(newBlog)
+
+  const changedBlog =  await Blog.findByIdAndUpdate(request.params.id, newBlog, { new: true })
+  return response.status(200).json(changedBlog)
 })
 
 

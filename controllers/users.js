@@ -1,6 +1,7 @@
 const bcrypt = require('bcrypt')
 const usersRouter = require('express').Router()
 const User = require('../models/user')
+const jwt = require('jsonwebtoken')
 
 usersRouter.post('/', async (request, response) => {
   const { username, name, password } = request.body
@@ -23,7 +24,7 @@ usersRouter.post('/', async (request, response) => {
 
 
   const token = jwt.sign(
-    userForToken, 
+    user,
     process.env.SECRET,
     { expiresIn: 60*60 }
   )
@@ -36,7 +37,7 @@ usersRouter.post('/', async (request, response) => {
 
 
 usersRouter.get('/', async (request, response) => {
-    const users = await User
+  const users = await User
     .find({}).populate('blogs', { title: 1, date: 1 })
   response.json(users)
 })
