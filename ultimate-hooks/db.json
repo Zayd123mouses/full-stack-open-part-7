@@ -1,0 +1,83 @@
+{
+  "notes": [
+    {
+      "content": "custom-hooks are great",
+      "id": 1
+    },
+    {
+      "content": "the best featrure ever <3",
+      "id": 2
+    },
+    {
+      "content": "testing the hook",
+      "id": 3
+    },
+    {
+      "content": "testing the hook",
+      "id": 4
+    },
+    {
+      "content": "testing again",
+      "id": 5
+    },
+    {
+      "content": "Tesing third",
+      "id": 6
+    },
+    {
+      "content": "Testing 4th",
+      "id": 7
+    },
+    {
+      "content": "testing 5th",
+      "id": 8
+    },
+    {
+      "content": "testing 6th",
+      "id": 9
+    },
+    {
+      "content": "testing 7th",
+      "id": 10
+    },
+    {
+      "content": "test 8th",
+      "id": 11
+    },
+    {
+      "content": "test 9th",
+      "id": 12
+    },
+    {
+      "content": "test 10th",
+      "id": 13
+    }
+  ],
+  "persons": [
+    {
+      "name": "mluukkai",
+      "number": "040-5483923",
+      "id": 1
+    },
+    {
+      "name": "kaltsoon",
+      "number": "045-2323456",
+      "id": 2
+    },
+    {
+      "name": "Testing 1 ",
+      "number": "1111111",
+      "id": 3
+    },
+    {
+      "name": "Testubg 2",
+      "number": "  14",
+      "id": 4
+    },
+    {
+      "name": "testing 2 ",
+      "number": "6595956",
+      "id": 5
+    }
+  ]
+}
