@@ -27,7 +27,7 @@ describe('<Togglable />', () => {
     expect(div).toHaveStyle('display: none')
   })
 
-  test('after clicking the button, children are displayed', async () => {
+  test('after clicking the button, children are displayed and clicking like button twice', async () => {
     
 
     const user = userEvent.setup()
@@ -42,6 +42,8 @@ describe('<Togglable />', () => {
 
     const div = container.querySelector('.likes')
     expect(handleLike.mock.calls).toHaveLength(2)
+  
+
 
 
   })

@@ -1,7 +1,10 @@
 import { useState } from 'react'
+import { useDispatch } from 'react-redux'
+import { createBlog } from '../reducers/BlogReducer'
+import { Table, Form, Button } from 'react-bootstrap'
 
-const NewBlog = ({ createBlog }) => {
-
+const NewBlog = ({ togglableRef }) => {
+   const dispatch = useDispatch()
   const [title, setTitle] = useState('')
   const [url, setUrl] = useState('')
   const [author, setAuthor] = useState('')
@@ -9,11 +12,11 @@ const NewBlog = ({ createBlog }) => {
   const addBlog = (event) => {
     event.preventDefault()
 
-    createBlog({
+    dispatch(createBlog({
       title: title,
       author:author,
       url: url
-    })
+    }))
     setTitle('')
     setUrl('')
     setAuthor('')
@@ -22,10 +25,10 @@ const NewBlog = ({ createBlog }) => {
   return(
     <>
       <h1>Add new blog</h1>
-      <form onSubmit={addBlog}>
+      <Form onSubmit={addBlog}>
         <div>
-        title
-          <input
+       <Form.Label>Title</Form.Label> 
+          <Form.Control
             type="text"
             value={title}
             placeholder='Title'
@@ -34,8 +37,8 @@ const NewBlog = ({ createBlog }) => {
           />
         </div>
         <div>
-          url
-          <input
+        <Form.Label>Url</Form.Label>
+          <Form.Control
             value={url}
             placeholder='Url'
 
@@ -44,8 +47,8 @@ const NewBlog = ({ createBlog }) => {
           />
         </div>
         <div>
-          Author
-          <input
+        <Form.Label>Author</Form.Label>
+          <Form.Control
             placeholder='Author'
 
             value={author}
@@ -53,8 +56,10 @@ const NewBlog = ({ createBlog }) => {
             onChange={({ target }) => setAuthor(target.value)}
           />
         </div>
-        <button type="submit">Add</button>
-      </form>
+        <Button variant="primary" type="submit" >
+          Add
+        </Button>
+      </Form>
 
     </>
   )}
